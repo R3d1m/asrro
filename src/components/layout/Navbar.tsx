@@ -117,8 +117,8 @@ export default function Navbar() {
             <span>Alumni</span>
           </Link>
 
-          <a
-            href="/#fleet"
+          <Link
+            href="/join"
             className={`inline-flex items-center gap-2 px-4.5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider transition-all ${
               isScrolled
                 ? "bg-black text-white hover:bg-zinc-800"
@@ -127,7 +127,7 @@ export default function Navbar() {
           >
             <span>Join</span>
             <ArrowUpRight className="size-3.5" />
-          </a>
+          </Link>
 
           <a
             href="mailto:contact@asrrocuetbd.org"
@@ -192,8 +192,8 @@ export default function Navbar() {
                 <GraduationCap className="size-3.5" />
                 <span>Distinguished Alumni</span>
               </Link>
-              <a
-                href="/#fleet"
+              <Link
+                href="/join"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`w-full flex items-center justify-center gap-2 py-3 font-mono text-xs font-bold uppercase tracking-wider ${
                   isScrolled
@@ -201,9 +201,16 @@ export default function Navbar() {
                     : "bg-amber-500 text-black"
                 }`}
               >
-                <span>Join</span>
+                <span>Join ASRRO Fleet</span>
                 <ArrowUpRight className="size-3.5" />
-              </a>
+              </Link>
+              <Link
+                href="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 py-2.5 font-mono text-[11px] text-zinc-400 hover:text-white uppercase tracking-wider"
+              >
+                <span>Committee Terminal</span>
+              </Link>
             </div>
           </div>
         </div>

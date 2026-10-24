@@ -110,6 +110,11 @@ export default function Footer() {
                   News & Press Coverage
                 </Link>
               </li>
+              <li>
+                <Link href="/admin" className="text-zinc-500 hover:text-black transition-colors block text-[11px]">
+                  Committee Terminal (Admin)
+                </Link>
+              </li>
             </ul>
           </div>
 

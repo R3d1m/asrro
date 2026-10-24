@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { 
   GraduationCap, 
@@ -23,25 +23,54 @@ import {
 import { alumniData, AlumniMember } from "@/data/alumniData";
 
 export default function AlumniDirectoryClient() {
+  const [alumniList, setAlumniList] = useState<AlumniMember[]>(alumniData);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<"all" | "leadership" | "academia" | "industry">("all");
   const [departmentFilter, setDepartmentFilter] = useState<string>("all");
   const [selectedAlumnus, setSelectedAlumnus] = useState<AlumniMember | null>(null);
 
+  // Sync with live Neon DB on mount
+  useEffect(() => {
+    fetch("/api/alumni/profile")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.alumni) && data.alumni.length > 0) {
+          const mapped: AlumniMember[] = data.alumni.map((dbRow: any) => ({
+            id: dbRow.id,
+            name: dbRow.name,
+            department: dbRow.department,
+            academicSession: dbRow.academic_session || "",
+            batch: dbRow.batch,
+            graduationYear: dbRow.graduation_year || "",
+            positionInCommittee: dbRow.position_in_committee || "",
+            currentWorkplace: dbRow.current_workplace || "",
+            higherStudies: dbRow.higher_studies || "",
+            researchInterests: dbRow.research_interests || [],
+            aboutMe: dbRow.about_me || "",
+            researchGate: dbRow.research_gate || "",
+            googleScholar: dbRow.google_scholar || "",
+            image: dbRow.image || "",
+          }));
+          setAlumniList(mapped);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   // Departments list for filtering
   const departments = useMemo(() => {
     const set = new Set<string>();
-    alumniData.forEach((a) => {
+    alumniList.forEach((a) => {
       if (a.department.includes("EEE") || a.department.includes("Electrical")) set.add("EEE");
       else if (a.department.includes("Mechanical") || a.department.includes("ME")) set.add("Mechanical");
       else if (a.department.includes("Petroleum") || a.department.includes("PME")) set.add("Petroleum");
     });
     return ["all", ...Array.from(set)];
-  }, []);
+  }, [alumniList]);
 
   // Filtered alumni list
   const filteredAlumni = useMemo(() => {
-    return alumniData.filter((alumnus) => {
+    return alumniList.filter((alumnus) => {
       // Search query filter
       const matchesSearch = 
         searchQuery.trim() === "" ||
@@ -91,7 +120,7 @@ export default function AlumniDirectoryClient() {
 
       return true;
     });
-  }, [searchQuery, selectedFilter, departmentFilter]);
+  }, [searchQuery, selectedFilter, departmentFilter, alumniList]);
 
   return (
     <div className="min-h-screen bg-[#030712] text-white selection:bg-amber-400 selection:text-black">
@@ -102,14 +131,22 @@ export default function AlumniDirectoryClient() {
         <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb / Back Link */}
-          <div className="mb-6">
+          {/* Breadcrumb / Back Link & Alumni Login */}
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <Link 
               href="/"
               className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-400 hover:text-amber-400 transition-colors py-1 px-2.5 bg-white/5 border border-white/10 rounded-sm"
             >
               <ArrowLeft className="size-3.5" />
               <span>Back to Portal Home</span>
+            </Link>
+
+            <Link
+              href="/alumni/login"
+              className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-amber-400 hover:text-black hover:bg-amber-400 transition-all py-1.5 px-3 bg-amber-400/10 border border-amber-400/40 rounded-sm font-bold cursor-pointer"
+            >
+              <GraduationCap className="size-3.5" />
+              <span>Alumni Login / Update Profile</span>
             </Link>
           </div>
 
