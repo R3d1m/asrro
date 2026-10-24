@@ -123,19 +123,19 @@ export default function AlumniDirectoryClient() {
   }, [searchQuery, selectedFilter, departmentFilter, alumniList]);
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white selection:bg-amber-400 selection:text-black">
+    <div className="min-h-screen bg-[#070e14] text-zinc-100 font-sans selection:bg-cyan-500 selection:text-black">
       {/* 1. Hero Header Banner */}
-      <section className="relative pt-28 pb-16 sm:pt-36 sm:pb-20 border-b border-white/10 overflow-hidden bg-gradient-to-b from-[#060b18] via-[#030712] to-[#030712]">
-        {/* Subtle Background Grid & Star Accents */}
+      <section className="relative pt-28 pb-16 sm:pt-36 sm:pb-20 border-b border-cyan-500/20 overflow-hidden bg-gradient-to-b from-[#06121c] via-[#070e14] to-[#070e14]">
+        {/* Subtle Background Grid & Accents */}
         <div className="absolute inset-0 technical-grid opacity-20 pointer-events-none" />
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb / Back Link & Alumni Login */}
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <Link 
               href="/"
-              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-400 hover:text-amber-400 transition-colors py-1 px-2.5 bg-white/5 border border-white/10 rounded-sm"
+              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-400 hover:text-cyan-400 transition-colors py-1 px-2.5 bg-white/5 border border-white/10 hover:border-cyan-500/30 rounded-sm"
             >
               <ArrowLeft className="size-3.5" />
               <span>Back to Portal Home</span>
@@ -143,7 +143,7 @@ export default function AlumniDirectoryClient() {
 
             <Link
               href="/alumni/login"
-              className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-amber-400 hover:text-black hover:bg-amber-400 transition-all py-1.5 px-3 bg-amber-400/10 border border-amber-400/40 rounded-sm font-bold cursor-pointer"
+              className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-cyan-400 hover:text-black hover:bg-cyan-400 transition-all py-1.5 px-3 bg-cyan-500/10 border border-cyan-500/40 rounded-sm font-bold cursor-pointer"
             >
               <GraduationCap className="size-3.5" />
               <span>Alumni Login / Update Profile</span>
@@ -151,7 +151,7 @@ export default function AlumniDirectoryClient() {
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-400 text-black font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500 text-black font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-4 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
               <GraduationCap className="size-3.5" />
               <span>ALUMNI NETWORK & RESEARCH LEGACY</span>
             </div>
@@ -167,28 +167,28 @@ export default function AlumniDirectoryClient() {
 
           {/* Quick Telemetry Specs Bar */}
           <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
-            <div className="p-3.5 bg-white/5 border border-white/10 backdrop-blur-md">
+            <div className="p-3.5 bg-black/60 border border-cyan-500/20 backdrop-blur-md">
               <span className="text-[10px] uppercase text-zinc-400 block tracking-wider font-semibold">TOTAL REGISTERED</span>
-              <span className="text-xl sm:text-2xl font-black text-amber-400 block mt-1">19 Pioneers</span>
+              <span className="text-xl sm:text-2xl font-black text-cyan-400 block mt-1">19 Pioneers</span>
             </div>
-            <div className="p-3.5 bg-white/5 border border-white/10 backdrop-blur-md">
+            <div className="p-3.5 bg-black/60 border border-cyan-500/20 backdrop-blur-md">
               <span className="text-[10px] uppercase text-zinc-400 block tracking-wider font-semibold">GLOBAL LABS</span>
               <span className="text-xl sm:text-2xl font-black text-white block mt-1">USA, UK, AUS</span>
             </div>
-            <div className="p-3.5 bg-white/5 border border-white/10 backdrop-blur-md">
+            <div className="p-3.5 bg-black/60 border border-cyan-500/20 backdrop-blur-md">
               <span className="text-[10px] uppercase text-zinc-400 block tracking-wider font-semibold">SECTORS</span>
               <span className="text-xl sm:text-2xl font-black text-white block mt-1">Academia & Industry</span>
             </div>
-            <div className="p-3.5 bg-white/5 border border-white/10 backdrop-blur-md">
+            <div className="p-3.5 bg-black/60 border border-cyan-500/20 backdrop-blur-md">
               <span className="text-[10px] uppercase text-zinc-400 block tracking-wider font-semibold">FOUNDATIONAL ROOTS</span>
-              <span className="text-xl sm:text-2xl font-black text-amber-400 block mt-1">2009 — Present</span>
+              <span className="text-xl sm:text-2xl font-black text-cyan-400 block mt-1">2009 — Present</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* 2. Search & Filtering Controls */}
-      <section className="sticky top-18 z-30 bg-[#030712]/95 backdrop-blur-md border-b border-white/10 py-4 px-4 sm:px-6 lg:px-8">
+      <section className="sticky top-18 z-30 bg-[#070e14]/95 backdrop-blur-md border-b border-cyan-500/20 py-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
@@ -198,7 +198,7 @@ export default function AlumniDirectoryClient() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, workplace, research topic, batch..."
-              className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/15 text-sm font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400 focus:bg-white/10 transition-colors"
+              className="w-full pl-10 pr-4 py-2 bg-black/50 border border-cyan-500/30 text-sm font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:bg-cyan-950/20 transition-colors"
             />
             {searchQuery && (
               <button
@@ -216,8 +216,8 @@ export default function AlumniDirectoryClient() {
               onClick={() => setSelectedFilter("all")}
               className={`px-3 py-1.5 border transition-all cursor-pointer ${
                 selectedFilter === "all"
-                  ? "bg-amber-400 text-black border-amber-300 font-bold"
-                  : "bg-white/5 text-zinc-300 border-white/10 hover:border-white/30"
+                  ? "bg-cyan-500 text-black border-cyan-400 font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                  : "bg-white/5 text-zinc-300 border-white/10 hover:border-cyan-500/40 hover:text-cyan-300"
               }`}
             >
               All ({alumniData.length})
@@ -226,8 +226,8 @@ export default function AlumniDirectoryClient() {
               onClick={() => setSelectedFilter("leadership")}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 border transition-all cursor-pointer ${
                 selectedFilter === "leadership"
-                  ? "bg-amber-400 text-black border-amber-300 font-bold"
-                  : "bg-white/5 text-zinc-300 border-white/10 hover:border-white/30"
+                  ? "bg-cyan-500 text-black border-cyan-400 font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                  : "bg-white/5 text-zinc-300 border-white/10 hover:border-cyan-500/40 hover:text-cyan-300"
               }`}
             >
               <Crown className="size-3" />
@@ -237,8 +237,8 @@ export default function AlumniDirectoryClient() {
               onClick={() => setSelectedFilter("academia")}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 border transition-all cursor-pointer ${
                 selectedFilter === "academia"
-                  ? "bg-amber-400 text-black border-amber-300 font-bold"
-                  : "bg-white/5 text-zinc-300 border-white/10 hover:border-white/30"
+                  ? "bg-cyan-500 text-black border-cyan-400 font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                  : "bg-white/5 text-zinc-300 border-white/10 hover:border-cyan-500/40 hover:text-cyan-300"
               }`}
             >
               <GraduationCap className="size-3" />
@@ -248,8 +248,8 @@ export default function AlumniDirectoryClient() {
               onClick={() => setSelectedFilter("industry")}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 border transition-all cursor-pointer ${
                 selectedFilter === "industry"
-                  ? "bg-amber-400 text-black border-amber-300 font-bold"
-                  : "bg-white/5 text-zinc-300 border-white/10 hover:border-white/30"
+                  ? "bg-cyan-500 text-black border-cyan-400 font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                  : "bg-white/5 text-zinc-300 border-white/10 hover:border-cyan-500/40 hover:text-cyan-300"
               }`}
             >
               <Briefcase className="size-3" />
@@ -263,7 +263,7 @@ export default function AlumniDirectoryClient() {
             <select
               value={departmentFilter}
               onChange={(e) => setDepartmentFilter(e.target.value)}
-              className="bg-zinc-900 border border-white/20 text-white px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:border-amber-400"
+              className="bg-black/70 border border-cyan-500/30 text-white px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:border-cyan-400"
             >
               <option value="all">All Departments</option>
               <option value="EEE">EEE</option>
@@ -277,7 +277,7 @@ export default function AlumniDirectoryClient() {
       {/* 3. Cards Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         {filteredAlumni.length === 0 ? (
-          <div className="p-12 text-center border border-white/10 bg-white/5 font-mono">
+          <div className="p-12 text-center border border-cyan-500/20 bg-black/60 font-mono">
             <p className="text-zinc-400 text-sm">No alumni found matching your filter criteria.</p>
             <button
               onClick={() => {
@@ -285,7 +285,7 @@ export default function AlumniDirectoryClient() {
                 setSelectedFilter("all");
                 setDepartmentFilter("all");
               }}
-              className="mt-4 px-4 py-2 bg-amber-400 text-black text-xs font-bold uppercase tracking-wider"
+              className="mt-4 px-4 py-2 bg-cyan-500 hover:bg-white text-black text-xs font-bold uppercase tracking-wider transition-colors"
             >
               Reset Filters
             </button>
@@ -298,10 +298,10 @@ export default function AlumniDirectoryClient() {
               return (
                 <div
                   key={alumnus.id}
-                  className="group relative flex flex-col bg-[#070c18] border border-white/15 hover:border-amber-400/80 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,158,11,0.15)] flex-1"
+                  className="group relative flex flex-col bg-[#0a1520] border border-cyan-500/25 hover:border-cyan-400/90 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.22)] flex-1"
                 >
                   {/* Card Top: Portrait Image Area */}
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-zinc-900">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-zinc-950">
                     <img
                       src={alumnus.image ? alumnus.image.replace("/images/Alumni/", "/images/alumni/") : "/images/asrrologo.png"}
                       alt={alumnus.name}
@@ -312,12 +312,12 @@ export default function AlumniDirectoryClient() {
                       }}
                     />
                     {/* Dark gradient overlay for text readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#070c18] via-transparent to-black/50" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1520] via-transparent to-black/60" />
                     
                     {/* Top Floating Badges */}
                     <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="font-mono text-[10px] font-bold px-2 py-0.5 bg-black/80 text-amber-400 border border-amber-400/40 backdrop-blur-md">
+                        <span className="font-mono text-[10px] font-bold px-2 py-0.5 bg-black/90 text-cyan-400 border border-cyan-500/40 backdrop-blur-md">
                           {alumnus.batch}
                         </span>
                         {alumnus.academicSession && (
@@ -328,7 +328,7 @@ export default function AlumniDirectoryClient() {
                       </div>
 
                       {alumnus.graduationYear && (
-                        <span className="font-mono text-[10px] px-2 py-0.5 bg-white/10 text-zinc-200 border border-white/20 backdrop-blur-md">
+                        <span className="font-mono text-[10px] px-2 py-0.5 bg-black/70 text-zinc-200 border border-white/20 backdrop-blur-md">
                           Grad: {alumnus.graduationYear}
                         </span>
                       )}
@@ -337,7 +337,7 @@ export default function AlumniDirectoryClient() {
                     {/* Past Committee Role Badge if available */}
                     {hasPastRole && (
                       <div className="absolute bottom-3 left-3 z-10">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-400 text-black font-mono text-[10px] font-black uppercase tracking-wider shadow-md">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-cyan-500 text-black font-mono text-[10px] font-black uppercase tracking-wider shadow-md">
                           <Crown className="size-3 fill-black" />
                           <span>{alumnus.positionInCommittee}</span>
                         </span>
@@ -347,7 +347,7 @@ export default function AlumniDirectoryClient() {
                     {/* Spotlight View Button */}
                     <button
                       onClick={() => setSelectedAlumnus(alumnus)}
-                      className="absolute bottom-3 right-3 z-10 size-8 flex items-center justify-center bg-black/80 border border-white/20 text-white hover:bg-amber-400 hover:text-black transition-colors cursor-pointer"
+                      className="absolute bottom-3 right-3 z-10 size-8 flex items-center justify-center bg-black/80 border border-white/20 text-white hover:bg-cyan-500 hover:text-black transition-colors cursor-pointer"
                       title="Inspect Dossier"
                     >
                       <Maximize2 className="size-3.5" />
@@ -358,22 +358,22 @@ export default function AlumniDirectoryClient() {
                   <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between">
                     <div>
                       {/* Name */}
-                      <h3 className="font-heading text-xl sm:text-2xl font-black uppercase tracking-tight text-white group-hover:text-amber-400 transition-colors">
+                      <h3 className="font-heading text-xl sm:text-2xl font-black uppercase tracking-tight text-white group-hover:text-cyan-400 transition-colors">
                         {alumnus.name}
                       </h3>
 
                       {/* Department */}
                       <p className="mt-1 text-xs font-mono text-zinc-400 flex items-center gap-1.5">
-                        <GraduationCap className="size-3 text-amber-400 shrink-0" />
+                        <GraduationCap className="size-3 text-cyan-400 shrink-0" />
                         <span>{alumnus.department}</span>
                       </p>
 
                       {/* Current Career & Higher Studies Telemetry Box */}
                       {(alumnus.currentWorkplace || alumnus.higherStudies) && (
-                        <div className="mt-4 p-3 bg-white/5 border border-white/10 space-y-2 text-xs font-mono">
+                        <div className="mt-4 p-3 bg-[#070e14]/90 border border-cyan-500/20 space-y-2 text-xs font-mono">
                           {alumnus.currentWorkplace && (
                             <div className="flex items-start gap-2">
-                              <Building2 className="size-3.5 text-amber-400 shrink-0 mt-0.5" />
+                              <Building2 className="size-3.5 text-cyan-400 shrink-0 mt-0.5" />
                               <div>
                                 <span className="text-[10px] text-zinc-400 uppercase block font-semibold">Current Workplace</span>
                                 <span className="text-white font-semibold block">{alumnus.currentWorkplace}</span>
@@ -382,8 +382,8 @@ export default function AlumniDirectoryClient() {
                           )}
 
                           {alumnus.higherStudies && (
-                            <div className={`flex items-start gap-2 ${alumnus.currentWorkplace ? "pt-2 border-t border-white/10" : ""}`}>
-                              <BookOpen className="size-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                            <div className={`flex items-start gap-2 ${alumnus.currentWorkplace ? "pt-2 border-t border-cyan-500/15" : ""}`}>
+                              <BookOpen className="size-3.5 text-cyan-300 shrink-0 mt-0.5" />
                               <div>
                                 <span className="text-[10px] text-zinc-400 uppercase block font-semibold">Higher Studies / Role</span>
                                 <span className="text-zinc-200 block">{alumnus.higherStudies}</span>
@@ -403,7 +403,7 @@ export default function AlumniDirectoryClient() {
                             {alumnus.researchInterests.map((interest, idx) => (
                               <span
                                 key={idx}
-                                className="px-2 py-0.5 bg-black/60 border border-white/15 text-[11px] font-mono text-zinc-300 rounded-xs"
+                                className="px-2 py-0.5 bg-cyan-950/40 border border-cyan-500/30 text-[11px] font-mono text-cyan-200 rounded-xs"
                               >
                                 {interest}
                               </span>
@@ -414,7 +414,7 @@ export default function AlumniDirectoryClient() {
 
                       {/* About Me snippet */}
                       {alumnus.aboutMe && alumnus.aboutMe.trim() && (
-                        <div className="mt-4 pt-3 border-t border-white/10">
+                        <div className="mt-4 pt-3 border-t border-cyan-500/15">
                           <p className="text-xs text-zinc-300 font-sans leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all">
                             "{alumnus.aboutMe}"
                           </p>
@@ -423,14 +423,14 @@ export default function AlumniDirectoryClient() {
                     </div>
 
                     {/* Card Footer: Academic Gateway & Modal Opener */}
-                    <div className="mt-6 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                    <div className="mt-6 pt-3 border-t border-cyan-500/15 flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         {alumnus.googleScholar && (
                           <a
                             href={alumnus.googleScholar}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/10 hover:bg-white hover:text-black border border-white/20 text-zinc-300 font-mono text-[10px] font-bold uppercase transition-colors"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-black/60 hover:bg-cyan-500 hover:text-black border border-cyan-500/30 text-cyan-300 font-mono text-[10px] font-bold uppercase transition-colors"
                             title="Google Scholar Profile"
                           >
                             <ExternalLink className="size-2.5" />
@@ -443,7 +443,7 @@ export default function AlumniDirectoryClient() {
                             href={alumnus.researchGate}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/10 hover:bg-teal-400 hover:text-black border border-white/20 text-zinc-300 font-mono text-[10px] font-bold uppercase transition-colors"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-black/60 hover:bg-cyan-400 hover:text-black border border-cyan-500/30 text-cyan-300 font-mono text-[10px] font-bold uppercase transition-colors"
                             title="ResearchGate Profile"
                           >
                             <ExternalLink className="size-2.5" />
@@ -454,7 +454,7 @@ export default function AlumniDirectoryClient() {
 
                       <button
                         onClick={() => setSelectedAlumnus(alumnus)}
-                        className="inline-flex items-center gap-1 font-mono text-[11px] text-amber-400 hover:text-white uppercase font-bold tracking-wider transition-colors ml-auto cursor-pointer"
+                        className="inline-flex items-center gap-1 font-mono text-[11px] text-cyan-400 hover:text-white uppercase font-bold tracking-wider transition-colors ml-auto cursor-pointer"
                       >
                         <span>Full Dossier</span>
                         <Maximize2 className="size-3" />
@@ -475,13 +475,13 @@ export default function AlumniDirectoryClient() {
           onClick={() => setSelectedAlumnus(null)}
         >
           <div 
-            className="relative max-w-3xl w-full bg-[#070c18] border-2 border-white/20 flex flex-col max-h-[92vh] overflow-hidden shadow-2xl"
+            className="relative max-w-3xl w-full bg-[#09151f] border-2 border-cyan-500/40 flex flex-col max-h-[92vh] overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.25)]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 bg-zinc-900 border-b border-zinc-800 text-xs font-mono">
+            <div className="flex items-center justify-between p-4 bg-black/80 border-b border-cyan-500/30 text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 bg-amber-400 text-black font-bold uppercase text-[10px]">
+                <span className="px-2 py-0.5 bg-cyan-500 text-black font-bold uppercase text-[10px]">
                   ALUMNI DOSSIER
                 </span>
                 <span className="text-white font-bold truncate max-w-xs sm:max-w-md">
@@ -491,7 +491,7 @@ export default function AlumniDirectoryClient() {
 
               <button
                 onClick={() => setSelectedAlumnus(null)}
-                className="size-8 flex items-center justify-center border border-zinc-700 bg-black text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors cursor-pointer"
+                className="size-8 flex items-center justify-center border border-cyan-500/40 bg-black text-zinc-400 hover:text-white hover:border-cyan-400 hover:bg-cyan-500/10 transition-colors cursor-pointer"
                 aria-label="Close Modal"
               >
                 <X className="size-4" />
@@ -502,7 +502,7 @@ export default function AlumniDirectoryClient() {
             <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
               <div className="flex flex-col sm:flex-row gap-6 items-start">
                 {/* Photo */}
-                <div className="w-full sm:w-48 aspect-square shrink-0 overflow-hidden border border-white/20 bg-black rounded-lg">
+                <div className="w-full sm:w-48 aspect-square shrink-0 overflow-hidden border border-cyan-500/30 bg-black rounded-lg">
                   <img
                     src={selectedAlumnus.image ? selectedAlumnus.image.replace("/images/Alumni/", "/images/alumni/") : "/images/asrrologo.png"}
                     alt={selectedAlumnus.name}
@@ -516,11 +516,11 @@ export default function AlumniDirectoryClient() {
                 {/* Main Details */}
                 <div className="flex-1 space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-2.5 py-0.5 bg-black border border-amber-400/50 text-amber-400 font-mono text-xs font-bold">
+                    <span className="px-2.5 py-0.5 bg-black border border-cyan-500/50 text-cyan-400 font-mono text-xs font-bold">
                       {selectedAlumnus.batch}
                     </span>
                     {selectedAlumnus.positionInCommittee && (
-                      <span className="px-2.5 py-0.5 bg-amber-400 text-black font-mono text-xs font-black uppercase">
+                      <span className="px-2.5 py-0.5 bg-cyan-500 text-black font-mono text-xs font-black uppercase">
                         {selectedAlumnus.positionInCommittee}
                       </span>
                     )}
@@ -555,14 +555,14 @@ export default function AlumniDirectoryClient() {
                     : "grid-cols-1"
                 }`}>
                   {selectedAlumnus.currentWorkplace && (
-                    <div className="p-4 bg-white/5 border border-white/10">
+                    <div className="p-4 bg-[#070e14] border border-cyan-500/25">
                       <span className="text-[10px] text-zinc-400 uppercase block font-semibold">CURRENT WORKPLACE</span>
-                      <span className="text-sm font-bold text-amber-400 block mt-1">{selectedAlumnus.currentWorkplace}</span>
+                      <span className="text-sm font-bold text-cyan-400 block mt-1">{selectedAlumnus.currentWorkplace}</span>
                     </div>
                   )}
 
                   {selectedAlumnus.higherStudies && (
-                    <div className="p-4 bg-white/5 border border-white/10">
+                    <div className="p-4 bg-[#070e14] border border-cyan-500/25">
                       <span className="text-[10px] text-zinc-400 uppercase block font-semibold">HIGHER STUDIES / ACADEMIC ROLE</span>
                       <span className="text-sm font-bold text-white block mt-1">
                         {selectedAlumnus.higherStudies}
@@ -582,7 +582,7 @@ export default function AlumniDirectoryClient() {
                     {selectedAlumnus.researchInterests.map((interest, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-black border border-white/20 font-mono text-xs text-amber-300"
+                        className="px-3 py-1 bg-cyan-950/50 border border-cyan-500/40 font-mono text-xs text-cyan-300"
                       >
                         {interest}
                       </span>
@@ -597,7 +597,7 @@ export default function AlumniDirectoryClient() {
                   <h4 className="font-mono text-xs uppercase tracking-wider text-zinc-400 mb-2 font-semibold">
                     Alumnus Profile & Experience
                   </h4>
-                  <div className="p-4 bg-black/60 border border-white/15 text-sm text-zinc-200 font-sans leading-relaxed">
+                  <div className="p-4 bg-black/60 border border-cyan-500/20 text-sm text-zinc-200 font-sans leading-relaxed">
                     "{selectedAlumnus.aboutMe}"
                   </div>
                 </div>
@@ -611,7 +611,7 @@ export default function AlumniDirectoryClient() {
                       href={selectedAlumnus.googleScholar}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black font-mono text-xs font-bold uppercase hover:bg-amber-400 transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 text-black font-mono text-xs font-bold uppercase hover:bg-white transition-colors"
                     >
                       <ExternalLink className="size-3.5" />
                       <span>View Google Scholar Profile</span>
@@ -623,7 +623,7 @@ export default function AlumniDirectoryClient() {
                       href={selectedAlumnus.researchGate}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-teal-400 text-black font-mono text-xs font-bold uppercase hover:bg-white transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-black border border-cyan-500/40 text-cyan-300 font-mono text-xs font-bold uppercase hover:bg-cyan-500 hover:text-black transition-colors"
                     >
                       <ExternalLink className="size-3.5" />
                       <span>View ResearchGate Profile</span>
@@ -634,10 +634,10 @@ export default function AlumniDirectoryClient() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 bg-zinc-950 border-t border-zinc-800 flex justify-end">
+            <div className="p-4 bg-black/90 border-t border-cyan-500/30 flex justify-end">
               <button
                 onClick={() => setSelectedAlumnus(null)}
-                className="px-5 py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-mono text-xs uppercase tracking-wider cursor-pointer"
+                className="px-5 py-2 bg-zinc-900 border border-cyan-500/30 hover:bg-cyan-500 hover:text-black text-white font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer"
               >
                 Close
               </button>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { 
   Rocket, 
   Menu, 
@@ -13,6 +14,7 @@ import {
 } from "lucide-react";
 
 export default function Navbar() {
+  const pathname = usePathname() || "";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -108,9 +110,11 @@ export default function Navbar() {
           <Link
             href="/alumni"
             className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider border transition-all ${
-              isScrolled
-                ? "bg-amber-400 text-black border-amber-500 hover:bg-black hover:text-white"
-                : "bg-white/10 text-white border-white/20 hover:bg-amber-400 hover:text-black hover:border-amber-400"
+              pathname.startsWith("/alumni")
+                ? "bg-cyan-500 text-black border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                : isScrolled
+                  ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/40 hover:bg-cyan-500 hover:text-black"
+                  : "bg-white/10 text-white border-white/20 hover:bg-cyan-500 hover:text-black hover:border-cyan-400"
             }`}
           >
             <GraduationCap className="size-3.5" />
@@ -184,9 +188,11 @@ export default function Navbar() {
                 href="/alumni"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`w-full flex items-center justify-center gap-2 py-3 font-mono text-xs font-bold uppercase tracking-wider border ${
-                  isScrolled
-                    ? "bg-amber-400 text-black border-amber-500"
-                    : "bg-white/10 text-white border-white/20"
+                  pathname.startsWith("/alumni")
+                    ? "bg-cyan-500 text-black border-cyan-400"
+                    : isScrolled
+                      ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/40"
+                      : "bg-white/10 text-white border-white/20 hover:border-cyan-400 hover:text-cyan-400"
                 }`}
               >
                 <GraduationCap className="size-3.5" />

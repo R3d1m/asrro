@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function AlumniPage() {
   return (
-    <div className="relative min-h-screen bg-[#030712] flex flex-col font-sans">
+    <div className="relative min-h-screen bg-[#070e14] flex flex-col font-sans">
       <Navbar />
       <main className="flex-1">
         <AlumniDirectoryClient />

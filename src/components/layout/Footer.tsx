@@ -100,9 +100,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/alumni" className="text-black font-bold hover:text-amber-600 transition-colors block flex items-center gap-1.5">
+                <Link href="/alumni" className="text-black font-bold hover:text-cyan-700 transition-colors block flex items-center gap-1.5">
                   <span>Distinguished Alumni</span>
-                  <span className="text-[9px] bg-amber-400 text-black px-1.5 py-0.2 font-black uppercase">New</span>
+                  <span className="text-[9px] bg-cyan-500 text-black px-1.5 py-0.2 font-black uppercase">New</span>
                 </Link>
               </li>
               <li>

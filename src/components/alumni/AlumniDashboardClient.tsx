@@ -215,16 +215,16 @@ export default function AlumniDashboardClient() {
   // Not logged in -> Show Alumni Sign In & Claim Portal
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-[#030712] text-white flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-[#070c18] border-2 border-amber-400 p-8 shadow-2xl relative">
-          <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
+      <div className="min-h-screen bg-[#070e14] text-white flex items-center justify-center p-4 selection:bg-cyan-500 selection:text-black">
+        <div className="max-w-md w-full bg-[#09151f] border-2 border-cyan-500/50 p-8 shadow-[0_0_40px_rgba(6,182,212,0.2)] relative">
+          <div className="flex items-center justify-between pb-4 mb-6 border-b border-cyan-500/20">
             <div className="flex items-center gap-2">
-              <GraduationCap className="size-5 text-amber-400" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-amber-400">
+              <GraduationCap className="size-5 text-cyan-400" />
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-cyan-400">
                 ALUMNI PORTAL
               </span>
             </div>
-            <Link href="/alumni" className="text-zinc-500 hover:text-white text-xs font-mono">
+            <Link href="/alumni" className="text-zinc-500 hover:text-cyan-400 text-xs font-mono transition-colors">
               ← Directory
             </Link>
           </div>
@@ -237,7 +237,7 @@ export default function AlumniDashboardClient() {
           </p>
 
           {authError && (
-            <div className="mb-4 p-3 bg-red-950 border border-red-500/50 text-red-200 text-xs font-mono">
+            <div className="mb-4 p-3 bg-red-950/80 border border-red-500/50 text-red-200 text-xs font-mono">
               {authError}
             </div>
           )}
@@ -254,7 +254,7 @@ export default function AlumniDashboardClient() {
                       const match = alumniData.find((a) => a.id === e.target.value);
                       if (match) setAuthName(match.name);
                     }}
-                    className="w-full px-3 py-2 bg-zinc-900 border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   >
                     {alumniData.map((a) => (
                       <option key={a.id} value={a.id}>
@@ -272,7 +272,7 @@ export default function AlumniDashboardClient() {
                     placeholder="Your Full Name"
                     value={authName}
                     onChange={(e) => setAuthName(e.target.value)}
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
               </>
@@ -286,7 +286,7 @@ export default function AlumniDashboardClient() {
                 placeholder="your.email@alumni.cuet.ac.bd"
                 value={authEmail}
                 onChange={(e) => setAuthEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
               />
             </div>
 
@@ -298,20 +298,20 @@ export default function AlumniDashboardClient() {
                 placeholder="••••••••"
                 value={authPassword}
                 onChange={(e) => setAuthPassword(e.target.value)}
-                className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
               />
             </div>
 
             <button
               type="submit"
               disabled={authLoading}
-              className="w-full py-2.5 bg-amber-400 hover:bg-white text-black font-black uppercase tracking-wider transition-colors cursor-pointer mt-2 disabled:opacity-50"
+              className="w-full py-2.5 bg-cyan-500 hover:bg-white text-black font-black uppercase tracking-wider transition-colors cursor-pointer mt-2 disabled:opacity-50 shadow-[0_0_20px_rgba(6,182,212,0.25)]"
             >
               {authLoading ? "Authenticating..." : isRegistering ? "Claim & Register Account" : "Access Dashboard"}
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-white/10 text-center font-mono text-xs">
+          <div className="mt-6 pt-4 border-t border-cyan-500/20 text-center font-mono text-xs">
             <button
               onClick={() => {
                 setIsRegistering(!isRegistering);
@@ -320,7 +320,7 @@ export default function AlumniDashboardClient() {
                 setSelectedAlumniClaim(first.id);
                 setAuthName(first.name);
               }}
-              className="text-zinc-400 hover:text-amber-400 transition-colors"
+              className="text-zinc-400 hover:text-cyan-400 transition-colors"
             >
               {isRegistering
                 ? "Already claimed your account? Sign In"
@@ -334,12 +334,12 @@ export default function AlumniDashboardClient() {
 
   // Logged in: Profile Editor
   return (
-    <div className="min-h-screen bg-[#030712] text-white selection:bg-amber-400 selection:text-black">
+    <div className="min-h-screen bg-[#070e14] text-white selection:bg-cyan-500 selection:text-black">
       {/* Top Header */}
-      <header className="border-b border-white/10 bg-[#060a14] px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-40">
+      <header className="border-b border-cyan-500/20 bg-[#070e14]/95 backdrop-blur-md px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-40">
         <div className="flex items-center gap-3">
           <Link href="/alumni" className="flex items-center gap-2">
-            <div className="size-8 bg-amber-400 text-black font-black flex items-center justify-center font-mono text-xs">
+            <div className="size-8 bg-cyan-500 text-black font-black flex items-center justify-center font-mono text-xs">
               AL
             </div>
             <span className="font-heading font-black text-lg text-white">ALUMNI DASHBOARD</span>
@@ -349,7 +349,7 @@ export default function AlumniDashboardClient() {
         <div className="flex items-center gap-4 font-mono text-xs">
           <Link
             href="/alumni"
-            className="text-zinc-400 hover:text-amber-400 flex items-center gap-1.5"
+            className="text-zinc-400 hover:text-cyan-400 flex items-center gap-1.5 transition-colors"
           >
             <span>View Public Directory</span>
             <ExternalLink className="size-3" />
@@ -367,9 +367,9 @@ export default function AlumniDashboardClient() {
 
       {/* Main Workspace */}
       <div className="max-w-4xl mx-auto px-4 sm:px-8 py-10">
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-cyan-500/20">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-amber-400 text-black font-mono text-[10px] font-black uppercase mb-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-cyan-500 text-black font-mono text-[10px] font-black uppercase mb-2 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
               PROFILE TELEMETRY NODE
             </div>
             <h1 className="font-heading text-2xl sm:text-3xl font-black uppercase text-white">
@@ -382,7 +382,7 @@ export default function AlumniDashboardClient() {
 
           <Link
             href="/alumni"
-            className="px-4 py-2 bg-white/10 hover:bg-white hover:text-black border border-white/20 font-mono text-xs uppercase font-bold transition-colors inline-flex items-center gap-2"
+            className="px-4 py-2 bg-white/10 hover:bg-cyan-500 hover:text-black border border-white/20 font-mono text-xs uppercase font-bold transition-colors inline-flex items-center gap-2"
           >
             <ArrowLeft className="size-3.5" />
             <span>Back to Directory</span>
@@ -390,14 +390,14 @@ export default function AlumniDashboardClient() {
         </div>
 
         {saveSuccess && (
-          <div className="mb-6 p-4 bg-emerald-950 border border-emerald-500/50 text-emerald-200 text-xs font-mono flex items-center gap-2">
+          <div className="mb-6 p-4 bg-emerald-950/80 border border-emerald-500/50 text-emerald-200 text-xs font-mono flex items-center gap-2">
             <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
             <span>Profile successfully updated in Neon Database! Changes are live.</span>
           </div>
         )}
 
         {saveError && (
-          <div className="mb-6 p-4 bg-red-950 border border-red-500/50 text-red-200 text-xs font-mono flex items-center gap-2">
+          <div className="mb-6 p-4 bg-red-950/80 border border-red-500/50 text-red-200 text-xs font-mono flex items-center gap-2">
             <AlertCircle className="size-4 text-red-400 shrink-0" />
             <span>{saveError}</span>
           </div>
@@ -406,8 +406,8 @@ export default function AlumniDashboardClient() {
         {profile && (
           <form onSubmit={handleSaveProfile} className="space-y-6">
             {/* Identity & Department */}
-            <div className="p-6 bg-[#070c18] border border-white/15 space-y-4 font-mono text-xs">
-              <h3 className="font-heading text-sm font-black uppercase tracking-wider text-amber-400 pb-2 border-b border-white/10 flex items-center gap-2">
+            <div className="p-6 bg-[#09151f] border border-cyan-500/25 space-y-4 font-mono text-xs">
+              <h3 className="font-heading text-sm font-black uppercase tracking-wider text-cyan-400 pb-2 border-b border-cyan-500/20 flex items-center gap-2">
                 <User className="size-4" />
                 <span>1. Academic & Identity Credentials</span>
               </h3>
@@ -419,7 +419,7 @@ export default function AlumniDashboardClient() {
                     type="text"
                     value={profile.name || ""}
                     onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
 
@@ -429,7 +429,7 @@ export default function AlumniDashboardClient() {
                     type="text"
                     value={profile.department || ""}
                     onChange={(e) => setProfile({ ...profile, department: e.target.value })}
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
 
@@ -439,7 +439,7 @@ export default function AlumniDashboardClient() {
                     type="text"
                     value={profile.batch || ""}
                     onChange={(e) => setProfile({ ...profile, batch: e.target.value })}
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
 
@@ -450,7 +450,7 @@ export default function AlumniDashboardClient() {
                     value={profile.academic_session || ""}
                     onChange={(e) => setProfile({ ...profile, academic_session: e.target.value })}
                     placeholder="e.g. 2011–2015"
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
 
@@ -461,7 +461,7 @@ export default function AlumniDashboardClient() {
                     value={profile.graduation_year || ""}
                     onChange={(e) => setProfile({ ...profile, graduation_year: e.target.value })}
                     placeholder="e.g. 2017"
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
 
@@ -472,15 +472,15 @@ export default function AlumniDashboardClient() {
                     value={profile.position_in_committee || ""}
                     onChange={(e) => setProfile({ ...profile, position_in_committee: e.target.value })}
                     placeholder="e.g. Former President / Vice President"
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
               </div>
             </div>
 
             {/* Current Affiliation & Higher Studies */}
-            <div className="p-6 bg-[#070c18] border border-white/15 space-y-4 font-mono text-xs">
-              <h3 className="font-heading text-sm font-black uppercase tracking-wider text-amber-400 pb-2 border-b border-white/10 flex items-center gap-2">
+            <div className="p-6 bg-[#09151f] border border-cyan-500/25 space-y-4 font-mono text-xs">
+              <h3 className="font-heading text-sm font-black uppercase tracking-wider text-cyan-400 pb-2 border-b border-cyan-500/20 flex items-center gap-2">
                 <Building2 className="size-4" />
                 <span>2. Career & Higher Education</span>
               </h3>
@@ -493,7 +493,7 @@ export default function AlumniDashboardClient() {
                     placeholder="e.g. University of Texas at Austin / Walton PLC"
                     value={profile.current_workplace || ""}
                     onChange={(e) => setProfile({ ...profile, current_workplace: e.target.value })}
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
 
@@ -504,15 +504,15 @@ export default function AlumniDashboardClient() {
                     placeholder="e.g. PhD in Biomedical Engineering, UT Austin"
                     value={profile.higher_studies || ""}
                     onChange={(e) => setProfile({ ...profile, higher_studies: e.target.value })}
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
               </div>
             </div>
 
             {/* Research & Biography */}
-            <div className="p-6 bg-[#070c18] border border-white/15 space-y-4 font-mono text-xs">
-              <h3 className="font-heading text-sm font-black uppercase tracking-wider text-amber-400 pb-2 border-b border-white/10 flex items-center gap-2">
+            <div className="p-6 bg-[#09151f] border border-cyan-500/25 space-y-4 font-mono text-xs">
+              <h3 className="font-heading text-sm font-black uppercase tracking-wider text-cyan-400 pb-2 border-b border-cyan-500/20 flex items-center gap-2">
                 <Tag className="size-4" />
                 <span>3. Research Focus & Biography</span>
               </h3>
@@ -526,7 +526,7 @@ export default function AlumniDashboardClient() {
                   placeholder="e.g. Machine Learning, Soft Robotics, IoT, Power Systems"
                   value={tagsInput}
                   onChange={(e) => setTagsInput(e.target.value)}
-                  className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                  className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                 />
                 <span className="text-[10px] text-zinc-500 font-mono block mt-1">
                   Separate multiple tags with commas (e.g. Robotics, AI, Drones).
@@ -540,14 +540,14 @@ export default function AlumniDashboardClient() {
                   placeholder="Share a brief overview of your journey, career achievements, and connection to ASRRO..."
                   value={profile.about_me || ""}
                   onChange={(e) => setProfile({ ...profile, about_me: e.target.value })}
-                  className="w-full px-3 py-2 bg-black border border-white/20 text-white font-sans text-xs focus:outline-none focus:border-amber-400"
+                  className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white font-sans text-xs focus:outline-none focus:border-cyan-400"
                 />
               </div>
             </div>
 
             {/* Scholarly Profiles */}
-            <div className="p-6 bg-[#070c18] border border-white/15 space-y-4 font-mono text-xs">
-              <h3 className="font-heading text-sm font-black uppercase tracking-wider text-amber-400 pb-2 border-b border-white/10 flex items-center gap-2">
+            <div className="p-6 bg-[#09151f] border border-cyan-500/25 space-y-4 font-mono text-xs">
+              <h3 className="font-heading text-sm font-black uppercase tracking-wider text-cyan-400 pb-2 border-b border-cyan-500/20 flex items-center gap-2">
                 <LinkIcon className="size-4" />
                 <span>4. Academic Gateway Links</span>
               </h3>
@@ -560,7 +560,7 @@ export default function AlumniDashboardClient() {
                     placeholder="https://scholar.google.com/citations?user=..."
                     value={profile.google_scholar || ""}
                     onChange={(e) => setProfile({ ...profile, google_scholar: e.target.value })}
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
 
@@ -571,7 +571,7 @@ export default function AlumniDashboardClient() {
                     placeholder="https://www.researchgate.net/profile/..."
                     value={profile.research_gate || ""}
                     onChange={(e) => setProfile({ ...profile, research_gate: e.target.value })}
-                    className="w-full px-3 py-2 bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-white focus:outline-none focus:border-cyan-400"
                   />
                 </div>
               </div>
@@ -586,7 +586,7 @@ export default function AlumniDashboardClient() {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-8 py-3.5 bg-amber-400 hover:bg-white text-black font-mono text-xs font-black uppercase tracking-wider transition-colors inline-flex items-center gap-2 cursor-pointer shadow-lg disabled:opacity-50"
+                className="px-8 py-3.5 bg-cyan-500 hover:bg-white text-black font-mono text-xs font-black uppercase tracking-wider transition-colors inline-flex items-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-50"
               >
                 {isSaving ? (
                   <span>Saving Updates...</span>
