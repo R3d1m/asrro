@@ -303,10 +303,13 @@ export default function AlumniDirectoryClient() {
                   {/* Card Top: Portrait Image Area */}
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-zinc-900">
                     <img
-                      src={alumnus.image}
+                      src={alumnus.image ? alumnus.image.replace("/images/Alumni/", "/images/alumni/") : "/images/asrrologo.png"}
                       alt={alumnus.name}
                       className="size-full object-cover object-center group-hover:scale-105 transition-transform duration-500 filter contrast-105"
                       loading="lazy"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/images/asrrologo.png";
+                      }}
                     />
                     {/* Dark gradient overlay for text readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#070c18] via-transparent to-black/50" />
@@ -501,9 +504,12 @@ export default function AlumniDirectoryClient() {
                 {/* Photo */}
                 <div className="w-full sm:w-48 aspect-square shrink-0 overflow-hidden border border-white/20 bg-black rounded-lg">
                   <img
-                    src={selectedAlumnus.image}
+                    src={selectedAlumnus.image ? selectedAlumnus.image.replace("/images/Alumni/", "/images/alumni/") : "/images/asrrologo.png"}
                     alt={selectedAlumnus.name}
                     className="size-full object-cover object-center"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "/images/asrrologo.png";
+                    }}
                   />
                 </div>
 

@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/images/Alumni/:path*",
+        destination: "/images/alumni/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
+
