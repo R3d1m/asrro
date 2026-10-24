@@ -44,7 +44,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="size-3.5 text-black shrink-0" />
-                <span>Executive Office: contact@asrrocuetbd.org</span>
+                <a href="mailto:asrro@cuet.ac.bd" className="hover:text-black hover:underline transition-colors">Executive Office: asrro@cuet.ac.bd</a>
               </div>
             </div>
           </div>

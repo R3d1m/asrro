@@ -50,10 +50,10 @@ export default function HeroSection() {
           </a>
 
           <a
-            href="#achievements"
+            href="mailto:asrro@cuet.ac.bd"
             className="inline-flex items-center gap-2 px-7 py-3.5 bg-black/40 hover:bg-black/80 text-white border border-white/30 hover:border-white transition-all backdrop-blur-xs"
           >
-            <span>Contact & Collab</span>
+            <span>Connect & Collab</span>
             <ArrowUpRight className="size-3.5 text-zinc-400" />
           </a>
         </div>

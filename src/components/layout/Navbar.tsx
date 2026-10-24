@@ -134,7 +134,7 @@ export default function Navbar() {
           </Link>
 
           <a
-            href="mailto:contact@asrrocuetbd.org"
+            href="mailto:asrro@cuet.ac.bd"
             className={`inline-flex items-center gap-2 px-3.5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
               isScrolled
                 ? "bg-white text-zinc-900 border border-zinc-300 hover:border-black hover:bg-zinc-50"
