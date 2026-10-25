@@ -34,6 +34,8 @@ export default function MembershipForm() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [applicationId, setApplicationId] = useState<number | null>(null);
+  const [emailSent, setEmailSent] = useState<boolean | null>(null);
+  const [emailMessage, setEmailMessage] = useState<string>("");
 
   const subteams = [
     {
@@ -97,6 +99,8 @@ export default function MembershipForm() {
       }
 
       setApplicationId(data.applicationId);
+      setEmailSent(Boolean(data.emailSent));
+      setEmailMessage(data.emailMessage || "");
       setSubmitSuccess(true);
     } catch (err: any) {
       setErrorMsg(err.message || "Something went wrong. Please verify your connection.");
@@ -107,15 +111,15 @@ export default function MembershipForm() {
 
   if (submitSuccess) {
     return (
-      <div className="min-h-screen bg-[#030712] text-white flex items-center justify-center p-4">
-        <div className="max-w-xl w-full bg-[#070c18] border-2 border-amber-400 p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+      <div className="min-h-screen bg-[#070e14] text-white flex items-center justify-center p-4">
+        <div className="max-w-xl w-full bg-[#0a1520] border-2 border-cyan-500/50 p-8 sm:p-10 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 technical-grid opacity-20 pointer-events-none" />
 
-          <div className="size-16 bg-amber-400/10 border-2 border-amber-400 flex items-center justify-center text-amber-400 mb-6">
+          <div className="size-16 bg-cyan-500/10 border-2 border-cyan-500 flex items-center justify-center text-cyan-400 mb-6">
             <CheckCircle2 className="size-8" />
           </div>
 
-          <div className="inline-block px-3 py-1 bg-amber-400 text-black font-mono text-[10px] font-black uppercase tracking-widest mb-3">
+          <div className="inline-block px-3 py-1 bg-cyan-500 text-black font-mono text-[10px] font-black uppercase tracking-widest mb-3">
             APPLICATION RECORDED #{applicationId || "OK"}
           </div>
 
@@ -127,11 +131,18 @@ export default function MembershipForm() {
             Welcome, <strong>{formData.fullName}</strong>. Your recruitment submission has been securely written to the ASRRO Central Research Admissions Database.
           </p>
 
-          <div className="mt-6 p-4 bg-black/70 border border-white/10 font-mono text-xs space-y-2">
-            <div><span className="text-zinc-400">STUDENT ID:</span> <span className="text-amber-400 font-bold">{formData.studentId}</span></div>
+          <div className="mt-6 p-4 bg-black/70 border border-cyan-500/20 font-mono text-xs space-y-2">
+            <div><span className="text-zinc-400">STUDENT ID:</span> <span className="text-cyan-400 font-bold">{formData.studentId}</span></div>
             <div><span className="text-zinc-400">DEPARTMENT:</span> <span className="text-white">{formData.department} (Batch '{formData.batch})</span></div>
             <div><span className="text-zinc-400">SUBTEAM:</span> <span className="text-white font-bold">{formData.subteam}</span></div>
-            <div><span className="text-zinc-400">AUTOMATED EMAIL:</span> <span className="text-emerald-400">DISPATCHED TO {formData.email}</span></div>
+            <div>
+              <span className="text-zinc-400">AUTOMATED EMAIL:</span>{" "}
+              {emailSent ? (
+                <span className="text-emerald-400 font-bold">DISPATCHED TO {formData.email}</span>
+              ) : (
+                <span className="text-cyan-400 font-bold">QUEUED FOR COMMITTEE REVIEW NOTIFICATION</span>
+              )}
+            </div>
           </div>
 
           <div className="mt-6 p-4 bg-cyan-950/30 border border-cyan-500/30 text-xs text-zinc-300 font-mono space-y-1">
@@ -140,14 +151,16 @@ export default function MembershipForm() {
               <span>WHAT HAPPENS NEXT?</span>
             </div>
             <p className="text-[11px] leading-relaxed text-zinc-300 pt-1">
-              Check your inbox for your official confirmation email with orientation dates and technical interview preparation guidelines.
+              {emailSent
+                ? "Check your inbox for your application receipt. You will receive an official recruitment decision email once the Executive Committee evaluates your dossier."
+                : "Your dossier is currently logged for committee evaluation. You will receive an official decision email with interview & orientation guidelines upon approval."}
             </p>
           </div>
 
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               href="/"
-              className="px-6 py-3 bg-amber-400 hover:bg-white text-black font-mono text-xs font-black uppercase tracking-wider transition-colors inline-flex items-center gap-2"
+              className="px-6 py-3 bg-cyan-500 hover:bg-white text-black font-mono text-xs font-black uppercase tracking-wider transition-colors inline-flex items-center gap-2"
             >
               <ArrowLeft className="size-4" />
               <span>Return to Portal</span>

@@ -24,7 +24,11 @@ import {
   Send,
   ArrowLeft,
   ChevronRight,
-  GraduationCap
+  GraduationCap,
+  Mail,
+  RefreshCw,
+  CheckCircle2,
+  AlertTriangle
 } from "lucide-react";
 
 interface Application {
@@ -41,6 +45,8 @@ interface Application {
   status: "pending" | "approved" | "rejected";
   review_notes?: string;
   reviewed_by?: string;
+  email_status?: string;
+  email_sent_at?: string;
   created_at: string;
 }
 
@@ -92,6 +98,19 @@ export default function AdminPortalClient() {
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
   const [reviewNotes, setReviewNotes] = useState("");
   const [updatingApp, setUpdatingApp] = useState(false);
+
+  // Email Notification & Customizer state
+  const [sendEmailOnDecision, setSendEmailOnDecision] = useState(true);
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailBody, setEmailBody] = useState("");
+  const [isEmailEditorExpanded, setIsEmailEditorExpanded] = useState(true);
+  const [emailFeedback, setEmailFeedback] = useState<{ type: "success" | "error" | ""; msg: string }>({ type: "", msg: "" });
+  const [sendingDirectEmail, setSendingDirectEmail] = useState(false);
+
+  // SMTP Diagnostics state
+  const [testingSmtp, setTestingSmtp] = useState(false);
+  const [smtpStatusResult, setSmtpStatusResult] = useState<{ ok: boolean; message: string; user?: string } | null>(null);
+  const [showSmtpModal, setShowSmtpModal] = useState(false);
 
   // News CMS state
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
@@ -251,28 +270,166 @@ export default function AdminPortalClient() {
     setCurrentUser(null);
   };
 
+  const getApprovalTemplate = (app: Application) => ({
+    subject: `Congratulations! Your ASRRO CUET Application Has Been Approved`,
+    body: `Dear ${app.full_name},
+
+Congratulations! We are thrilled to inform you that your recruitment application to join the Andromeda Space & Robotics Research Organization (ASRRO) at CUET has been officially APPROVED by the Executive Committee!
+
+Assigned Squad / Subteam: ${app.subteam}
+Department: ${app.department} (Batch '${app.batch})
+Student ID: ${app.student_id}
+
+Next Steps & Orientation Instructions:
+1. Please join our official recruit briefing group.
+2. Bring your Student ID to the upcoming ASRRO introductory workshop and technical orientation.
+3. Prepare to collaborate on frontier projects in aerospace rocketry, autonomous UAVs, and advanced robotics.
+
+Welcome aboard to the ASRRO CUET research fleet!
+
+Best regards,
+Executive Committee
+Andromeda Space & Robotics Research Organization (ASRRO)
+Chittagong University of Engineering & Technology (CUET)
+Desk: asrro@cuet.ac.bd`,
+  });
+
+  const getRejectionTemplate = (app: Application) => ({
+    subject: `Update Regarding Your ASRRO CUET Recruitment Application`,
+    body: `Dear ${app.full_name},
+
+Thank you for your interest and the time you invested in applying to join the Andromeda Space & Robotics Research Organization (ASRRO) at CUET.
+
+After careful evaluation of submissions for the ${app.subteam} division, we regret to inform you that we are unable to offer you a position in this recruitment cycle due to high candidate volume and squad capacity limits.
+
+We encourage you to participate in our open workshops, public astronomy sessions, and university tech competitions, and to apply again in the next cycle.
+
+We wish you all the best in your academic and technical pursuits.
+
+Best regards,
+Executive Committee
+Andromeda Space & Robotics Research Organization (ASRRO)
+CUET`,
+  });
+
+  const openAppModal = (app: Application) => {
+    setSelectedApp(app);
+    setReviewNotes(app.review_notes || "");
+    setEmailFeedback({ type: "", msg: "" });
+    const template = app.status === "rejected" ? getRejectionTemplate(app) : getApprovalTemplate(app);
+    setEmailSubject(template.subject);
+    setEmailBody(template.body);
+    setSendEmailOnDecision(true);
+    setIsEmailEditorExpanded(true);
+  };
+
   const handleStatusUpdate = async (id: number, status: "approved" | "rejected") => {
     setUpdatingApp(true);
+    setEmailFeedback({ type: "", msg: "" });
     try {
       const res = await fetch("/api/membership/applications", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, status, reviewNotes }),
+        body: JSON.stringify({ 
+          id, 
+          status, 
+          reviewNotes,
+          sendEmail: sendEmailOnDecision,
+          emailSubject,
+          emailBody,
+        }),
       });
 
       const data = await res.json();
       if (data.success) {
         setApplications((prev) =>
-          prev.map((app) => (app.id === id ? { ...app, status, review_notes: reviewNotes } : app))
+          prev.map((app) => (app.id === id ? { ...app, ...data.application } : app))
         );
         if (selectedApp?.id === id) {
-          setSelectedApp((prev) => (prev ? { ...prev, status, review_notes: reviewNotes } : null));
+          setSelectedApp(data.application);
         }
+        if (sendEmailOnDecision) {
+          if (data.emailDispatched) {
+            setEmailFeedback({
+              type: "success",
+              msg: `Recruit marked as ${status.toUpperCase()} and official decision email delivered to ${data.application.email}!`,
+            });
+          } else {
+            setEmailFeedback({
+              type: "error",
+              msg: `Status updated to ${status.toUpperCase()}, but email failed: ${data.emailError || "SMTP not configured in Vercel"}.`,
+            });
+          }
+        } else {
+          setEmailFeedback({
+            type: "success",
+            msg: `Status successfully updated to ${status.toUpperCase()} (Email notification was skipped).`,
+          });
+        }
+      } else {
+        setEmailFeedback({ type: "error", msg: data.error || "Failed to update application." });
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setEmailFeedback({ type: "error", msg: err.message || "Failed to update application." });
     } finally {
       setUpdatingApp(false);
+    }
+  };
+
+  const handleSendDirectEmail = async () => {
+    if (!selectedApp) return;
+    setSendingDirectEmail(true);
+    setEmailFeedback({ type: "", msg: "" });
+    try {
+      const res = await fetch("/api/membership/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: selectedApp.id,
+          subject: emailSubject,
+          message: emailBody,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setEmailFeedback({
+          type: "success",
+          msg: `Official notification email successfully dispatched to ${selectedApp.email}! Check your Gmail Sent folder.`,
+        });
+        setSelectedApp(data.application);
+        setApplications((prev) =>
+          prev.map((a) => (a.id === selectedApp.id ? { ...a, ...data.application } : a))
+        );
+      } else {
+        setEmailFeedback({
+          type: "error",
+          msg: data.error || "Failed to send email. Check SMTP credentials in Vercel settings.",
+        });
+      }
+    } catch (err: any) {
+      setEmailFeedback({
+        type: "error",
+        msg: err.message || "Network error while attempting to send email.",
+      });
+    } finally {
+      setSendingDirectEmail(false);
+    }
+  };
+
+  const handleTestSmtp = async () => {
+    setTestingSmtp(true);
+    setSmtpStatusResult(null);
+    setShowSmtpModal(true);
+    try {
+      const res = await fetch("/api/admin/smtp-test");
+      const data = await res.json();
+      setSmtpStatusResult(data);
+    } catch (err: any) {
+      setSmtpStatusResult({ ok: false, message: err.message || "Failed to contact diagnostic endpoint." });
+    } finally {
+      setTestingSmtp(false);
     }
   };
 
@@ -511,7 +668,16 @@ export default function AdminPortalClient() {
           </span>
         </div>
 
-        <div className="flex items-center gap-4 font-mono text-xs">
+        <div className="flex items-center gap-3 font-mono text-xs">
+          <button
+            onClick={handleTestSmtp}
+            className="px-3 py-1.5 bg-cyan-950/60 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer text-xs"
+            title="Verify Gmail SMTP connection status"
+          >
+            <Mail className="size-3" />
+            <span className="hidden md:inline">Test SMTP</span>
+          </button>
+
           <div className="text-right hidden sm:block">
             <span className="text-white font-bold block">{currentUser.name}</span>
             <span className="text-[10px] text-zinc-400 block">{currentUser.email}</span>
@@ -660,24 +826,28 @@ export default function AdminPortalClient() {
                         </td>
                         <td className="p-3.5 text-zinc-200">{app.subteam}</td>
                         <td className="p-3.5">
-                          <span
-                            className={`inline-block px-2 py-0.5 text-[10px] font-bold uppercase ${
-                              app.status === "approved"
-                                ? "bg-emerald-950 text-emerald-300 border border-emerald-500/50"
-                                : app.status === "rejected"
-                                ? "bg-red-950 text-red-300 border border-red-500/50"
-                                : "bg-amber-950 text-amber-300 border border-amber-500/50"
-                            }`}
-                          >
-                            {app.status}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span
+                              className={`inline-block px-2 py-0.5 text-[10px] font-bold uppercase ${
+                                app.status === "approved"
+                                  ? "bg-emerald-950 text-emerald-300 border border-emerald-500/50"
+                                  : app.status === "rejected"
+                                  ? "bg-red-950 text-red-300 border border-red-500/50"
+                                  : "bg-amber-950 text-amber-300 border border-amber-500/50"
+                              }`}
+                            >
+                              {app.status}
+                            </span>
+                            {app.email_sent_at && (
+                              <span title={`Email sent on ${new Date(app.email_sent_at).toLocaleDateString()}`} className="text-emerald-400">
+                                <Mail className="size-3.5" />
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="p-3.5 text-right">
                           <button
-                            onClick={() => {
-                              setSelectedApp(app);
-                              setReviewNotes(app.review_notes || "");
-                            }}
+                            onClick={() => openAppModal(app)}
                             className="px-3 py-1 bg-amber-400 hover:bg-white text-black font-black uppercase text-[10px] transition-colors cursor-pointer inline-flex items-center gap-1"
                           >
                             <Eye className="size-3" />
@@ -1083,45 +1253,254 @@ export default function AdminPortalClient() {
                 </div>
               )}
 
+              {/* Email Delivery Status Information */}
+              <div className="p-3 bg-black/60 border border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                <div className="flex items-center gap-2">
+                  <Mail className="size-4 text-cyan-400" />
+                  <span className="text-zinc-400">EMAIL TELEMETRY:</span>
+                  {selectedApp.email_sent_at ? (
+                    <span className="text-emerald-400 font-bold">
+                      Dispatched on {new Date(selectedApp.email_sent_at).toLocaleString()}
+                    </span>
+                  ) : (
+                    <span className="text-zinc-500">No decision email recorded yet</span>
+                  )}
+                </div>
+
+                {selectedApp.email_status && (
+                  <span className="text-[10px] text-zinc-400 font-mono">
+                    Status: <strong className="text-white">{selectedApp.email_status}</strong>
+                  </span>
+                )}
+              </div>
+
+              {/* Real-time Email Feedback Alert */}
+              {emailFeedback.msg && (
+                <div
+                  className={`p-3 font-mono text-xs border rounded-sm ${
+                    emailFeedback.type === "success"
+                      ? "bg-emerald-950/80 border-emerald-500 text-emerald-200"
+                      : "bg-red-950/80 border-red-500 text-red-200"
+                  }`}
+                >
+                  <div className="flex items-start gap-2">
+                    {emailFeedback.type === "success" ? (
+                      <CheckCircle2 className="size-4 text-emerald-400 shrink-0 mt-0.5" />
+                    ) : (
+                      <AlertTriangle className="size-4 text-red-400 shrink-0 mt-0.5" />
+                    )}
+                    <span>{emailFeedback.msg}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Internal Committee Review Notes */}
               <div>
                 <label className="block font-mono text-xs uppercase text-zinc-400 mb-1 font-bold">
-                  Committee Review Notes
+                  Internal Committee Review Notes
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Optional interview schedule notes or review feedback..."
+                  placeholder="Optional internal interview notes or committee feedback..."
                   value={reviewNotes}
                   onChange={(e) => setReviewNotes(e.target.value)}
                   className="w-full px-3 py-2 bg-black border border-white/20 text-xs font-mono text-white focus:outline-none focus:border-amber-400"
                 />
               </div>
 
+              {/* OFFICIAL APPLICANT EMAIL NOTIFICATION (EDITABLE OPTION) */}
+              <div className="p-4 bg-cyan-950/20 border border-cyan-500/40 rounded-sm space-y-3 font-mono">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <label className="flex items-center gap-2 cursor-pointer select-none text-xs font-bold text-cyan-300">
+                    <input
+                      type="checkbox"
+                      checked={sendEmailOnDecision}
+                      onChange={(e) => setSendEmailOnDecision(e.target.checked)}
+                      className="size-4 accent-cyan-400 cursor-pointer"
+                    />
+                    <span>Send official email notification upon decision</span>
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsEmailEditorExpanded(!isEmailEditorExpanded)}
+                    className="text-[11px] text-cyan-400 hover:text-white underline cursor-pointer"
+                  >
+                    {isEmailEditorExpanded ? "Hide Email Editor" : "Modify Email Content"}
+                  </button>
+                </div>
+
+                {isEmailEditorExpanded && (
+                  <div className="pt-2 border-t border-cyan-500/20 space-y-3 text-xs">
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="text-[10px] uppercase text-zinc-400 font-bold">
+                          Email Subject Line
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const t = selectedApp.status === "rejected" ? getRejectionTemplate(selectedApp) : getApprovalTemplate(selectedApp);
+                            setEmailSubject(t.subject);
+                            setEmailBody(t.body);
+                          }}
+                          className="text-[10px] text-zinc-400 hover:text-cyan-300 transition-colors"
+                        >
+                          ↺ Reset Default Template
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        value={emailSubject}
+                        onChange={(e) => setEmailSubject(e.target.value)}
+                        className="w-full px-3 py-1.5 bg-black border border-cyan-500/30 text-white font-mono text-xs focus:outline-none focus:border-cyan-400"
+                        placeholder="Subject line..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] uppercase text-zinc-400 mb-1 font-bold">
+                        Email Message Body (Admin Modified Option)
+                      </label>
+                      <textarea
+                        rows={7}
+                        value={emailBody}
+                        onChange={(e) => setEmailBody(e.target.value)}
+                        className="w-full px-3 py-2 bg-black border border-cyan-500/30 text-zinc-200 font-mono text-xs leading-relaxed focus:outline-none focus:border-cyan-400"
+                        placeholder="Custom notification message to send to applicant..."
+                      />
+                      <span className="text-[10px] text-zinc-500 block mt-0.5">
+                        Will be dispatched to: <strong className="text-cyan-400">{selectedApp.email}</strong> via Gmail SMTP.
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Action Buttons */}
               <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
                 <div className="font-mono text-xs">
                   Current Status:{" "}
-                  <strong className="uppercase text-amber-400">{selectedApp.status}</strong>
+                  <strong className={`uppercase ${selectedApp.status === "approved" ? "text-emerald-400" : selectedApp.status === "rejected" ? "text-red-400" : "text-amber-400"}`}>
+                    {selectedApp.status}
+                  </strong>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Resend / Send Email Now button (especially useful if already approved!) */}
                   <button
-                    disabled={updatingApp}
+                    type="button"
+                    disabled={sendingDirectEmail || updatingApp}
+                    onClick={handleSendDirectEmail}
+                    className="px-3.5 py-2 bg-cyan-600 hover:bg-cyan-500 text-black font-mono text-xs font-black uppercase transition-colors cursor-pointer inline-flex items-center gap-1.5 disabled:opacity-50"
+                    title="Dispatch this custom email right now to the recruit"
+                  >
+                    <Send className="size-3" />
+                    <span>{sendingDirectEmail ? "Sending..." : "Dispatch Email Now"}</span>
+                  </button>
+
+                  <button
+                    disabled={updatingApp || sendingDirectEmail}
                     onClick={() => handleStatusUpdate(selectedApp.id, "rejected")}
-                    className="px-4 py-2 bg-red-950 hover:bg-red-900 border border-red-500/50 text-red-200 font-mono text-xs font-bold uppercase transition-colors cursor-pointer"
+                    className="px-4 py-2 bg-red-950 hover:bg-red-900 border border-red-500/50 text-red-200 font-mono text-xs font-bold uppercase transition-colors cursor-pointer disabled:opacity-50"
                   >
                     Reject
                   </button>
 
                   <button
-                    disabled={updatingApp}
+                    disabled={updatingApp || sendingDirectEmail}
                     onClick={() => handleStatusUpdate(selectedApp.id, "approved")}
-                    className="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-mono text-xs font-black uppercase transition-colors cursor-pointer"
+                    className="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-mono text-xs font-black uppercase transition-colors cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
                   >
-                    Approve Recruit
+                    <CheckCircle2 className="size-3.5" />
+                    <span>{updatingApp ? "Saving..." : "Approve Recruit"}</span>
                   </button>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* SMTP Test Diagnostic Modal */}
+      {showSmtpModal && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+          onClick={() => setShowSmtpModal(false)}
+        >
+          <div
+            className="relative max-w-md w-full bg-[#09151f] border-2 border-cyan-500/50 p-6 shadow-2xl font-mono text-xs"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20 mb-4">
+              <div className="flex items-center gap-2 text-cyan-400 font-bold uppercase">
+                <Mail className="size-4" />
+                <span>SMTP CONNECTION DIAGNOSTIC</span>
+              </div>
+              <button
+                onClick={() => setShowSmtpModal(false)}
+                className="text-zinc-400 hover:text-white"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+
+            {testingSmtp ? (
+              <div className="py-8 text-center space-y-3">
+                <RefreshCw className="size-6 animate-spin text-cyan-400 mx-auto" />
+                <p className="text-zinc-300">Testing connection to Gmail SMTP server (smtp.gmail.com:465)...</p>
+              </div>
+            ) : smtpStatusResult ? (
+              <div className="space-y-4">
+                <div
+                  className={`p-4 border rounded-sm ${
+                    smtpStatusResult.ok
+                      ? "bg-emerald-950/80 border-emerald-500 text-emerald-200"
+                      : "bg-red-950/80 border-red-500 text-red-200"
+                  }`}
+                >
+                  <div className="flex items-start gap-2.5">
+                    {smtpStatusResult.ok ? (
+                      <CheckCircle2 className="size-5 text-emerald-400 shrink-0 mt-0.5" />
+                    ) : (
+                      <AlertTriangle className="size-5 text-red-400 shrink-0 mt-0.5" />
+                    )}
+                    <div>
+                      <strong className="block mb-1">
+                        {smtpStatusResult.ok ? "SMTP Connection Successful!" : "SMTP Connection Failed"}
+                      </strong>
+                      <p className="text-[11px] leading-relaxed opacity-90">{smtpStatusResult.message}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {!smtpStatusResult.ok && (
+                  <div className="p-3 bg-black/60 border border-white/10 text-zinc-300 text-[11px] space-y-1.5 leading-relaxed">
+                    <strong className="text-amber-400 block uppercase">Troubleshooting Steps:</strong>
+                    <div>1. Open Google Account &rarr; Security &rarr; App passwords.</div>
+                    <div>2. Generate a new 16-character code (e.g. for `ASRRO Vercel`).</div>
+                    <div>3. Go to Vercel Project Settings &rarr; Environment Variables.</div>
+                    <div>4. Update <code className="text-cyan-300">SMTP_PASS</code> with the 16 characters (no spaces).</div>
+                    <div>5. Click <strong>Redeploy</strong> in Vercel to load the new credentials.</div>
+                  </div>
+                )}
+
+                <div className="pt-2 flex justify-end gap-2">
+                  <button
+                    onClick={handleTestSmtp}
+                    className="px-4 py-2 bg-cyan-950 border border-cyan-500/40 text-cyan-300 hover:text-white uppercase font-bold"
+                  >
+                    Test Again
+                  </button>
+                  <button
+                    onClick={() => setShowSmtpModal(false)}
+                    className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white uppercase font-bold"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       )}

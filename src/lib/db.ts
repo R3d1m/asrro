@@ -73,9 +73,17 @@ export async function initDb(): Promise<boolean> {
         status VARCHAR(50) NOT NULL DEFAULT 'pending',
         review_notes TEXT,
         reviewed_by VARCHAR(255),
+        email_status VARCHAR(150),
+        email_sent_at TIMESTAMPTZ,
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
+    `);
+
+    // Migration safe additions for existing deployments
+    await query(`
+      ALTER TABLE membership_applications ADD COLUMN IF NOT EXISTS email_status VARCHAR(150);
+      ALTER TABLE membership_applications ADD COLUMN IF NOT EXISTS email_sent_at TIMESTAMPTZ;
     `);
 
     // 3. Events table

@@ -45,20 +45,40 @@ export async function POST(request: Request) {
 
     const applicationId = inserted[0]?.id;
 
-    // Send automated email via Nodemailer (runs asynchronously without blocking response failure)
-    sendMembershipConfirmationEmail({
-      fullName: fullName.trim(),
-      email: email.trim().toLowerCase(),
-      studentId: studentId.trim(),
-      department: department.trim(),
-      batch: batch.trim(),
-      subteam: subteam.trim(),
-    }).catch((err) => console.error("Email dispatch background error:", err));
+    // Send automated confirmation email via Nodemailer (awaited so serverless execution doesn't terminate before dispatch)
+    let emailResult = { success: false, message: "Email dispatch bypassed" };
+    try {
+      emailResult = await sendMembershipConfirmationEmail({
+        fullName: fullName.trim(),
+        email: email.trim().toLowerCase(),
+        studentId: studentId.trim(),
+        department: department.trim(),
+        batch: batch.trim(),
+        subteam: subteam.trim(),
+      });
+
+      if (emailResult.success) {
+        await query(
+          `UPDATE membership_applications SET email_status = 'confirmation_sent', email_sent_at = CURRENT_TIMESTAMP WHERE id = $1`,
+          [applicationId]
+        );
+      } else {
+        await query(
+          `UPDATE membership_applications SET email_status = $1 WHERE id = $2`,
+          [emailResult.message.slice(0, 140), applicationId]
+        );
+      }
+    } catch (err: any) {
+      console.error("Email dispatch caught error:", err);
+      emailResult = { success: false, message: err?.message || "Email dispatch failed" };
+    }
 
     return NextResponse.json({
       success: true,
       applicationId,
-      message: "Membership application successfully submitted! A confirmation email has been dispatched.",
+      emailSent: emailResult.success,
+      emailMessage: emailResult.message,
+      message: "Membership application successfully submitted!",
     });
   } catch (error: any) {
     console.error("Membership Application Error:", error);
